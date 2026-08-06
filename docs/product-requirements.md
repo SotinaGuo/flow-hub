@@ -71,3 +71,43 @@ pending -> withdrawn
 - 组件需要具备单元测试。
 - 页面应具备响应式布局、清晰的信息层级和完整的交互状态。
 - 代码应易于将 Mock Repository 替换为真实 API。
+
+## 页面结构
+
+- `/applications`：申请列表
+- `/applications/new`：选择类型并创建申请
+- `/applications/[id]`：申请详情和状态操作
+- `/reports`：统计报表
+
+## 数据模型
+
+核心实体包括：
+
+- `Applicant`：姓名、部门、职位、邮箱
+- `ApplicationType`：`leave`、`reimbursement`、`overtime`
+- `ApplicationStatus`：`draft`、`pending`、`approved`、`rejected`、`withdrawn`
+- `Application`：编号、类型、申请人、内容、状态、提交时间、更新时间、状态历史
+- `ApplicationFormData`：按申请类型承载不同表单字段
+
+申请类型字段使用判别联合或类型守卫建模，避免在组件中使用无约束的字段访问。
+
+## 实现边界
+
+数据访问通过 `application-repository` 统一封装，页面和组件不直接依赖 Mock 数组。纯业务计算放在 `lib/application` 下，Mock 数据集中放在 `lib/mocks` 下，组件只负责交互和展示。
+
+第一版使用客户端本地 Mock 数据，Repository 接口保持异步形式，便于后续替换为 API 请求。第一版不包含真实登录、权限系统、后端持久化、多人审批协作和用户自定义表单设计器。
+
+## 测试策略
+
+- 使用 Vitest 测试表单校验、类型字段解析、状态转换和统计聚合。
+- 为申请类型选择、表单错误提示、预览返回编辑和列表筛选补充 Svelte 组件测试。
+- 对 ECharts 封装验证无数据处理、初始化、窗口尺寸变化和销毁行为。
+- 完成后执行测试、类型检查、Lint 检查和生产构建。
+
+## UI/UX 要求
+
+- 采用适合内部运营工具的紧凑、清晰、可扫描布局。
+- 使用语义化 HTML、可访问的表单控件和键盘可操作的交互。
+- 所有主要操作提供 hover、focus、loading、disabled 和错误反馈。
+- 页面需要兼容移动端，不允许文本溢出、内容遮挡或布局跳动。
+- 使用 Tailwind CSS 建立一致的间距、颜色和状态样式。
