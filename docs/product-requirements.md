@@ -49,9 +49,9 @@
 ### 状态流转
 
 ```text
-草稿 -> 待审批 -> 已通过
-              -> 已驳回
-待审批 -> 已撤回
+draft -> pending -> approved
+                  -> rejected
+pending -> withdrawn
 ```
 
 非法状态转换不得执行，并需要向用户提供明确反馈。
