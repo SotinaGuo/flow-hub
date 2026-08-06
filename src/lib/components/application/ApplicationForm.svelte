@@ -1,26 +1,28 @@
 <script lang="ts">
 	import type { ApplicationFormErrors } from '$lib/application/validation';
-	import type { ApplicationType } from '$lib/application/types';
-	import { mockApplicants } from '$lib/mocks/applications';
+	import type { Applicant, ApplicationType } from '$lib/application/types';
+	import type { ApplicationFormDraft } from '$lib/application/form';
+	import { applicationTypeConfigs } from '$lib/application/config';
 
 	let {
 		type,
 		value,
 		errors,
+		applicants,
 		onchange
 	}: {
 		type: ApplicationType;
-		value: Record<string, unknown>;
+		value: ApplicationFormDraft;
 		errors: ApplicationFormErrors;
-		onchange: (value: Record<string, unknown>) => void;
+		applicants: Applicant[];
+		onchange: (value: ApplicationFormDraft) => void;
 	} = $props();
 
-	const applicants = mockApplicants;
-	const departments = [...new Set(mockApplicants.map((applicant) => applicant.department))];
+	const departments = $derived([...new Set(applicants.map((applicant) => applicant.department))]);
 
-	function update(field: string, nextValue: unknown) {
+	function update(field: keyof ApplicationFormDraft, nextValue: string) {
 		if (field === 'applicantName') {
-			const applicant = mockApplicants.find((item) => item.name === nextValue);
+			const applicant = applicants.find((item) => item.name === nextValue);
 			onchange({
 				...value,
 				applicantName: nextValue,
@@ -54,7 +56,7 @@
 					onchange={(event) => update('applicantName', inputValue(event))}
 				>
 					<option value="">请选择申请人</option>
-					{#each applicants as applicant (applicant)}
+					{#each applicants as applicant (applicant.email)}
 						<option value={applicant.name}>{applicant.name}</option>
 					{/each}
 				</select>
@@ -97,9 +99,9 @@
 						onchange={(event) => update('leaveType', inputValue(event))}
 					>
 						<option value="">请选择假期类型</option>
-						<option value="annual">年假</option>
-						<option value="sick">病假</option>
-						<option value="personal">事假</option>
+						{#each applicationTypeConfigs.leave.options.leaveType as option (option.value)}
+							<option value={option.value}>{option.label}</option>
+						{/each}
 					</select>
 					{#if errors.leaveType}<small class="field-error">{errors.leaveType}</small>{/if}
 				</label>
@@ -124,9 +126,10 @@
 					><span>报销类型 <b>*</b></span><select
 						value={String(value.reimbursementType ?? '')}
 						onchange={(event) => update('reimbursementType', inputValue(event))}
-						><option value="">请选择报销类型</option><option value="travel">差旅交通</option><option
-							value="meal">工作餐</option
-						><option value="equipment">办公设备</option></select
+						><option value="">请选择报销类型</option
+						>{#each applicationTypeConfigs.reimbursement.options.reimbursementType as option (option.value)}<option
+								value={option.value}>{option.label}</option
+							>{/each}</select
 					>{#if errors.reimbursementType}<small class="field-error"
 							>{errors.reimbursementType}</small
 						>{/if}</label
@@ -139,7 +142,7 @@
 							min="0"
 							step="0.01"
 							value={String(value.amount ?? '')}
-							oninput={(event) => update('amount', Number(inputValue(event)))}
+							oninput={(event) => update('amount', inputValue(event))}
 						/>
 					</div>
 					{#if errors.amount}<small class="field-error">{errors.amount}</small>{/if}</label

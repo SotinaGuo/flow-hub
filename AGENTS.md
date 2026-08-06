@@ -1,42 +1,42 @@
-# Frontend Project Rules
+# 前端项目规则
 
-## Product Scope
+## 产品范围
 
-This project implements a reusable application workflow MVP with three mocked request types:
+本项目实现一个可复用的通用申请流程 MVP，第一版包含三种 Mock 申请类型：
 
-- Leave
-- Reimbursement
-- Overtime
+- 请假
+- 报销
+- 加班
 
-The MVP includes creating an application, previewing and editing it, viewing the application list and details, handling workflow status, and displaying application statistics.
+MVP 包含发起申请、预览和编辑申请、查看申请列表与详情、处理流程状态，以及展示申请统计数据。
 
-## Required Technology
+## 技术约束
 
 - TypeScript
 - SvelteKit
 - Tailwind CSS
 - Vitest
-- Apache ECharts for charts
+- Apache ECharts（图表）
 
-React, Vue, and Angular must not be used. Small additional libraries are allowed only when they solve a concrete problem and do not duplicate existing capabilities.
+禁止使用 React、Vue 和 Angular。只有在解决明确问题且不会重复现有能力时，才允许引入少量其他轻量级依赖。
 
-## Engineering Rules
+## 工程规则
 
-- Inspect the repository and existing patterns before making changes.
-- Keep changes focused on the requested behavior and preserve unrelated user changes.
-- Prefer clear, small modules over premature abstractions.
-- Keep business logic, data access, and view logic separate.
-- Use explicit TypeScript types and avoid `any` unless unavoidable and documented.
-- Handle loading, empty, error, success, and disabled states where relevant.
-- Use semantic HTML, keyboard-accessible interactions, visible focus states, and responsive layouts.
-- Keep UI spacing, typography, colors, and interaction states consistent.
-- Do not introduce arbitrary mock data inside components; keep it in the mock data layer.
-- Apache ECharts instances must handle resize and disposal correctly.
-- Add Vitest coverage for business logic and key Svelte component behavior.
-- Run the relevant tests, type checks, lint checks, and production build before claiming completion.
+- 修改前先检查项目结构、现有代码和既有实现模式。
+- 修改范围聚焦当前需求，并保留用户无关的已有修改。
+- 优先使用清晰、简洁的模块，避免过早抽象。
+- 分离业务逻辑、数据访问逻辑和视图逻辑。
+- 使用明确的 TypeScript 类型，除非确有必要并说明原因，否则避免使用 `any`。
+- 在适用场景正确处理 loading、empty、error、success 和 disabled 状态。
+- 使用语义化 HTML，保证键盘可操作、焦点状态可见，并支持响应式布局。
+- 保持 UI 的间距、字体、颜色和交互状态一致。
+- 不要在组件中随意编写 Mock 数据，Mock 数据应集中在数据层。
+- Apache ECharts 实例必须正确处理窗口尺寸变化和销毁。
+- 为业务逻辑和关键 Svelte 组件补充 Vitest 测试。
+- 在声称任务完成前，运行相关测试、类型检查、Lint 检查和生产构建。
 
-## Delivery Rules
+## 交付规则
 
-- State assumptions when requirements are ambiguous.
-- Do not claim a command passed unless it was actually run.
-- Report modified files, verification results, and remaining risks at the end of each task.
+- 需求存在歧义时，明确说明假设。
+- 未实际执行的命令不得声称通过。
+- 每次任务结束时报告修改文件、验证结果和剩余风险。

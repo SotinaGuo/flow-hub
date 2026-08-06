@@ -1,19 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {
-		applicationTypeLabels,
-		applicationStatusLabels,
-		type ApplicationStatistics
-	} from '$lib/application/types';
+	import type { ApplicationStatistics } from '$lib/application/types';
+	import { hasApplicationStatisticsData } from '$lib/application/statistics';
+	import { setupReportCharts } from '$lib/application/report-charts';
 
 	let { statistics }: { statistics: ApplicationStatistics } = $props();
 	let statusChartElement: HTMLDivElement;
 	let typeChartElement: HTMLDivElement;
 
 	onMount(() => {
-		let statusChart: import('echarts').ECharts | undefined;
-		let typeChart: import('echarts').ECharts | undefined;
 		let disposed = false;
+		let cleanupCharts: () => void = () => undefined;
 
 		void Promise.all([
 			import('echarts/core'),
@@ -21,7 +18,7 @@
 			import('echarts/components'),
 			import('echarts/renderers')
 		]).then(([echarts, charts, components, renderers]) => {
-			if (disposed) return;
+			if (disposed || !hasApplicationStatisticsData(statistics)) return;
 
 			echarts.use([
 				charts.BarChart,
@@ -31,65 +28,25 @@
 				renderers.CanvasRenderer
 			]);
 
-			statusChart = echarts.init(statusChartElement);
-			typeChart = echarts.init(typeChartElement);
-
-			statusChart.setOption({
-				color: ['#d77a61', '#2e8881', '#b8a06b', '#86929a'],
-				tooltip: { trigger: 'item' },
-				series: [
-					{
-						type: 'pie',
-						radius: ['54%', '76%'],
-						avoidLabelOverlap: true,
-						itemStyle: { borderRadius: 4, borderColor: '#fffdf9', borderWidth: 3 },
-						label: { show: false },
-						data: [
-							{ value: statistics.pending, name: applicationStatusLabels.pending },
-							{ value: statistics.approved, name: applicationStatusLabels.approved },
-							{ value: statistics.rejected, name: applicationStatusLabels.rejected },
-							{ value: statistics.withdrawn, name: applicationStatusLabels.withdrawn }
-						]
+			cleanupCharts = setupReportCharts(
+				{
+					init: (element) => {
+						const chart = echarts.init(element);
+						return {
+							setOption: (option) => chart.setOption(option as never),
+							resize: () => chart.resize(),
+							dispose: () => chart.dispose()
+						};
 					}
-				]
-			});
-
-			typeChart.setOption({
-				color: ['#2e8881', '#d77a61', '#c39247'],
-				grid: { left: 12, right: 18, top: 18, bottom: 28, containLabel: true },
-				tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-				xAxis: {
-					type: 'category',
-					data: ['请假', '报销', '加班'],
-					axisTick: { show: false },
-					axisLine: { lineStyle: { color: '#ddd8cf' } }
 				},
-				yAxis: { type: 'value', minInterval: 1, splitLine: { lineStyle: { color: '#eeeae3' } } },
-				series: [
-					{
-						type: 'bar',
-						barWidth: 28,
-						data: [
-							{ value: statistics.byType.leave, name: applicationTypeLabels.leave },
-							{ value: statistics.byType.reimbursement, name: applicationTypeLabels.reimbursement },
-							{ value: statistics.byType.overtime, name: applicationTypeLabels.overtime }
-						],
-						itemStyle: { borderRadius: [4, 4, 0, 0] }
-					}
-				]
-			});
+				{ status: statusChartElement, type: typeChartElement },
+				statistics,
+				window
+			);
 		});
-
-		const resize = () => {
-			statusChart?.resize();
-			typeChart?.resize();
-		};
-		window.addEventListener('resize', resize);
 		return () => {
 			disposed = true;
-			window.removeEventListener('resize', resize);
-			statusChart?.dispose();
-			typeChart?.dispose();
+			cleanupCharts();
 		};
 	});
 </script>
@@ -103,17 +60,8 @@
 			</div>
 			<span class="panel-note">共 {statistics.total} 条</span>
 		</div>
-		<div
-			class="chart-wrap"
-			class:chart-empty={statistics.pending +
-				statistics.approved +
-				statistics.rejected +
-				statistics.withdrawn ===
-				0}
-		>
-			{#if statistics.pending + statistics.approved + statistics.rejected + statistics.withdrawn === 0}<span
-					>暂无可统计数据</span
-				>{/if}
+		<div class="chart-wrap" class:chart-empty={!hasApplicationStatisticsData(statistics)}>
+			{#if !hasApplicationStatisticsData(statistics)}<span>暂无可统计数据</span>{/if}
 			<div class="chart" bind:this={statusChartElement}></div>
 		</div>
 	</section>
@@ -125,6 +73,9 @@
 			</div>
 			<span class="panel-note">Mock 数据</span>
 		</div>
-		<div class="chart-wrap"><div class="chart" bind:this={typeChartElement}></div></div>
+		<div class="chart-wrap" class:chart-empty={!hasApplicationStatisticsData(statistics)}>
+			{#if !hasApplicationStatisticsData(statistics)}<span>暂无可统计数据</span>{/if}
+			<div class="chart" bind:this={typeChartElement}></div>
+		</div>
 	</section>
 </div>

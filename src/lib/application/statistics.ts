@@ -18,3 +18,7 @@ export function getApplicationStatistics(applications: Application[]): Applicati
 		byType
 	};
 }
+
+export function hasApplicationStatisticsData(statistics: ApplicationStatistics): boolean {
+	return statistics.total > 0;
+}

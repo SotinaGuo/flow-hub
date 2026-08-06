@@ -5,60 +5,46 @@
 	import {
 		applicationTypeLabels,
 		type Application,
-		type ApplicationFormData,
+		type Applicant,
 		type ApplicationType
 	} from '$lib/application/types';
+	import {
+		createInitialFormData,
+		toApplicationFormData,
+		type ApplicationFormDraft
+	} from '$lib/application/form';
+	import { getApplicantByName, listApplicants } from '$lib/application/applicants';
 	import { validateApplicationForm, type ApplicationFormErrors } from '$lib/application/validation';
 	import ApplicationForm from '$lib/components/application/ApplicationForm.svelte';
 	import ApplicationPreview from '$lib/components/application/ApplicationPreview.svelte';
 	import ApplicationTypeSelector from '$lib/components/application/ApplicationTypeSelector.svelte';
-	import { mockApplicants } from '$lib/mocks/applications';
 
 	let selectedType = $state<ApplicationType>('leave');
-	let formData = $state<Record<string, unknown>>(initialFormData('leave'));
+	const applicants = listApplicants();
+	let formData = $state<ApplicationFormDraft>(createInitialFormData('leave'));
 	let errors = $state<ApplicationFormErrors>({});
 	let previewing = $state(false);
 	let submitting = $state(false);
 	let feedback = $state('');
 	let previewApplication = $state<Application | null>(null);
 
-	function initialFormData(type: ApplicationType): Record<string, unknown> {
-		return type === 'leave'
-			? { applicantName: '', department: '', leaveType: '', startDate: '', endDate: '', reason: '' }
-			: type === 'reimbursement'
-				? {
-						applicantName: '',
-						department: '',
-						reimbursementType: '',
-						amount: '',
-						expenseDate: '',
-						reason: ''
-					}
-				: {
-						applicantName: '',
-						department: '',
-						workDate: '',
-						startTime: '',
-						endTime: '',
-						reason: ''
-					};
-	}
-
 	function changeType(type: ApplicationType) {
 		selectedType = type;
-		formData = initialFormData(type);
+		formData = createInitialFormData(type);
 		errors = {};
 		previewing = false;
 		feedback = '';
 	}
 
-	function changeForm(nextValue: Record<string, unknown>) {
+	function changeForm(nextValue: ApplicationFormDraft) {
 		formData = nextValue;
 		feedback = '';
 	}
 
-	function getApplicant() {
-		return mockApplicants.find((item) => item.name === formData.applicantName) ?? mockApplicants[0];
+	function getApplicant(): Applicant {
+		const applicant = getApplicantByName(formData.applicantName) ?? applicants[0];
+		if (!applicant) throw new Error('申请人数据不可用');
+		return applicant;
 	}
 
 	function handlePreview() {
@@ -69,11 +55,17 @@
 			return;
 		}
 
+		const typedFormData = toApplicationFormData(selectedType, formData);
+		if (!typedFormData) {
+			feedback = '申请信息格式不正确，请检查后重试';
+			return;
+		}
+
 		previewApplication = {
 			id: 'PREVIEW',
 			type: selectedType,
 			applicant: getApplicant(),
-			formData: formData as unknown as ApplicationFormData,
+			formData: typedFormData,
 			status: 'draft',
 			submittedAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
@@ -133,7 +125,13 @@
 			handlePreview();
 		}}
 	>
-		<ApplicationForm type={selectedType} value={formData} {errors} onchange={changeForm} />
+		<ApplicationForm
+			type={selectedType}
+			value={formData}
+			{errors}
+			{applicants}
+			onchange={changeForm}
+		/>
 		{#if feedback}<p class="feedback form-feedback">{feedback}</p>{/if}
 		<div class="form-actions">
 			<a class="button secondary" href={resolve('/applications')}>取消</a><button

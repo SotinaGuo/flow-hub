@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { applicationTypeLabels } from '$lib/application/types';
 	import type { Application } from '$lib/application/types';
+	import { getApplicationSummary } from '$lib/application/presentation';
 	import { resolve } from '$app/paths';
 	import StatusBadge from './StatusBadge.svelte';
 
@@ -10,14 +11,6 @@
 		return new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric' }).format(
 			new Date(date)
 		);
-	}
-
-	function getSummary(application: Application): string {
-		const data = application.formData as unknown as Record<string, unknown>;
-		if (application.type === 'reimbursement')
-			return `¥${Number(data.amount).toLocaleString('zh-CN')}`;
-		if (application.type === 'leave') return `${data.startDate} - ${data.endDate}`;
-		return `${data.workDate} ${data.startTime} - ${data.endTime}`;
 	}
 </script>
 
@@ -46,7 +39,7 @@
 								><span>{application.applicant.name}</span>
 							</div></td
 						>
-						<td>{getSummary(application)}</td>
+						<td>{getApplicationSummary(application)}</td>
 						<td class="muted-text">{formatDate(application.submittedAt)}</td>
 						<td><StatusBadge status={application.status} /></td>
 						<td

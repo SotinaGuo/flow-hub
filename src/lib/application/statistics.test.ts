@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getApplicationStatistics } from './statistics';
+import { getApplicationStatistics, hasApplicationStatisticsData } from './statistics';
 import type { Application } from './types';
 
 const applications: Application[] = [
@@ -49,5 +49,11 @@ describe('application statistics', () => {
 			withdrawn: 0,
 			byType: { leave: 1, reimbursement: 1, overtime: 0 }
 		});
+	});
+
+	it('identifies an empty report dataset', () => {
+		const statistics = getApplicationStatistics([]);
+
+		expect(hasApplicationStatisticsData(statistics)).toBe(false);
 	});
 });
