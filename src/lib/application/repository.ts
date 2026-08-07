@@ -47,8 +47,8 @@ class MockApplicationRepository {
 		const application: Application = {
 			id: createId(),
 			type,
-			applicant,
-			formData,
+			applicant: { ...applicant },
+			formData: { ...formData },
 			status: 'pending',
 			submittedAt: now,
 			updatedAt: now,

@@ -738,6 +738,9 @@ textarea {
 .preview-person span {
 	display: block;
 }
+.preview-person span.profile-avatar {
+	display: grid;
+}
 .preview-person strong {
 	color: var(--ink);
 	font-size: 14px;

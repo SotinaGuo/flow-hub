@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateApplicationForm } from './validation';
+import { getLiveValidationErrors, validateApplicationForm } from './validation';
 
 describe('application form validation', () => {
 	it('requires the shared applicant fields', () => {
@@ -81,5 +81,31 @@ describe('application form validation', () => {
 			customTypeName: '请输入自定义申请类型名称',
 			customTemplate: '请选择自定义申请模板'
 		});
+	});
+
+	it('only shows live errors after validation has started', () => {
+		const invalidDraft = {
+			applicantName: '',
+			department: '',
+			origin: '上海',
+			destination: '北京',
+			startDate: '2026-08-10',
+			endDate: '2026-08-12',
+			reason: ''
+		};
+		const validDraft = {
+			...invalidDraft,
+			applicantName: '林晓',
+			department: '产品部',
+			reason: '客户现场会议'
+		};
+
+		expect(getLiveValidationErrors('travel', invalidDraft, false)).toEqual({});
+		expect(getLiveValidationErrors('travel', invalidDraft, true)).toMatchObject({
+			applicantName: '请输入申请人姓名',
+			department: '请选择所属部门',
+			reason: '请输入申请事由'
+		});
+		expect(getLiveValidationErrors('travel', validDraft, true)).toEqual({});
 	});
 });

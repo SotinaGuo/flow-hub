@@ -95,3 +95,11 @@ export function validateApplicationForm(
 
 	return errors;
 }
+
+export function getLiveValidationErrors(
+	type: ApplicationType,
+	formData: ApplicationFormInput,
+	validationStarted: boolean
+): ApplicationFormErrors {
+	return validationStarted ? validateApplicationForm(type, formData) : {};
+}
