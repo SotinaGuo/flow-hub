@@ -2,9 +2,11 @@ import type { Application, ApplicationStatistics, ApplicationType } from './type
 
 export function getApplicationStatistics(applications: Application[]): ApplicationStatistics {
 	const byType: Record<ApplicationType, number> = {
-		leave: 0,
+		travel: 0,
+		procurement: 0,
 		reimbursement: 0,
-		overtime: 0
+		overtime: 0,
+		custom: 0
 	};
 
 	for (const application of applications) byType[application.type] += 1;

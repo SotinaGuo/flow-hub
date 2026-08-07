@@ -19,9 +19,9 @@
 	import ApplicationPreview from '$lib/components/application/ApplicationPreview.svelte';
 	import ApplicationTypeSelector from '$lib/components/application/ApplicationTypeSelector.svelte';
 
-	let selectedType = $state<ApplicationType>('leave');
+	let selectedType = $state<ApplicationType>('travel');
 	const applicants = listApplicants();
-	let formData = $state<ApplicationFormDraft>(createInitialFormData('leave'));
+	let formData = $state<ApplicationFormDraft>(createInitialFormData('travel'));
 	let errors = $state<ApplicationFormErrors>({});
 	let previewing = $state(false);
 	let submitting = $state(false);

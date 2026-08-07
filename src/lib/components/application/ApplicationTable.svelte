@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { applicationTypeLabels } from '$lib/application/types';
+	import { getApplicationTypeLabel } from '$lib/application/config';
 	import type { Application } from '$lib/application/types';
 	import { getApplicationSummary } from '$lib/application/presentation';
 	import { resolve } from '$app/paths';
@@ -11,6 +11,12 @@
 		return new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric' }).format(
 			new Date(date)
 		);
+	}
+
+	function getTypeLabel(application: Application): string {
+		const customTypeName =
+			'customTypeName' in application.formData ? application.formData.customTypeName : undefined;
+		return getApplicationTypeLabel(application.type, customTypeName);
 	}
 </script>
 
@@ -32,7 +38,7 @@
 								>{application.id}</a
 							></td
 						>
-						<td><span class="type-label">{applicationTypeLabels[application.type]}</span></td>
+						<td><span class="type-label">{getTypeLabel(application)}</span></td>
 						<td
 							><div class="table-person">
 								<span class="profile-avatar tiny">{application.applicant.name.slice(0, 1)}</span

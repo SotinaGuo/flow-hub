@@ -3,6 +3,7 @@ import {
 	applicationTypeLabels,
 	type ApplicationStatistics
 } from './types';
+import { applicationTypes } from './config';
 
 export interface ReportChartInstance {
 	setOption(option: Record<string, unknown>): void;
@@ -43,12 +44,12 @@ function getStatusChartOption(statistics: ApplicationStatistics): Record<string,
 
 function getTypeChartOption(statistics: ApplicationStatistics): Record<string, unknown> {
 	return {
-		color: ['#2e8881', '#d77a61', '#c39247'],
+		color: ['#2e8881', '#d77a61', '#c39247', '#86929a', '#6b7f95'],
 		grid: { left: 12, right: 18, top: 18, bottom: 28, containLabel: true },
 		tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
 		xAxis: {
 			type: 'category',
-			data: ['请假', '报销', '加班'],
+			data: applicationTypes.map((type) => applicationTypeLabels[type].replace(/申请$/, '')),
 			axisTick: { show: false },
 			axisLine: { lineStyle: { color: '#ddd8cf' } }
 		},
@@ -57,11 +58,10 @@ function getTypeChartOption(statistics: ApplicationStatistics): Record<string, u
 			{
 				type: 'bar',
 				barWidth: 28,
-				data: [
-					{ value: statistics.byType.leave, name: applicationTypeLabels.leave },
-					{ value: statistics.byType.reimbursement, name: applicationTypeLabels.reimbursement },
-					{ value: statistics.byType.overtime, name: applicationTypeLabels.overtime }
-				],
+				data: applicationTypes.map((type) => ({
+					value: statistics.byType[type],
+					name: applicationTypeLabels[type]
+				})),
 				itemStyle: { borderRadius: [4, 4, 0, 0] }
 			}
 		]

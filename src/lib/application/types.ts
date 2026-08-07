@@ -1,4 +1,6 @@
-export type ApplicationType = 'leave' | 'reimbursement' | 'overtime';
+export type BuiltInApplicationType = 'travel' | 'procurement' | 'reimbursement' | 'overtime';
+export type CustomApplicationTemplate = 'general' | 'amount' | 'time';
+export type ApplicationType = BuiltInApplicationType | 'custom';
 
 export type ApplicationStatus = 'draft' | 'pending' | 'approved' | 'rejected' | 'withdrawn';
 
@@ -15,10 +17,17 @@ export interface SharedFormData {
 	reason: string;
 }
 
-export interface LeaveFormData extends SharedFormData {
-	leaveType: 'annual' | 'sick' | 'personal';
+export interface TravelFormData extends SharedFormData {
+	origin: string;
+	destination: string;
 	startDate: string;
 	endDate: string;
+}
+
+export interface ProcurementFormData extends SharedFormData {
+	item: string;
+	amount: number;
+	purchaseDate: string;
 }
 
 export interface ReimbursementFormData extends SharedFormData {
@@ -33,7 +42,31 @@ export interface OvertimeFormData extends SharedFormData {
 	endTime: string;
 }
 
-export type ApplicationFormData = LeaveFormData | ReimbursementFormData | OvertimeFormData;
+export interface CustomGeneralFormData extends SharedFormData {
+	customTypeName: string;
+	customTemplate: 'general';
+	customDate: string;
+}
+
+export interface CustomAmountFormData extends SharedFormData {
+	customTypeName: string;
+	customTemplate: 'amount';
+	customDate: string;
+	amount: number;
+}
+
+export interface CustomTimeFormData extends SharedFormData {
+	customTypeName: string;
+	customTemplate: 'time';
+	workDate: string;
+	startTime: string;
+	endTime: string;
+}
+
+export type CustomFormData = CustomGeneralFormData | CustomAmountFormData | CustomTimeFormData;
+
+export type ApplicationFormData =
+	TravelFormData | ProcurementFormData | ReimbursementFormData | OvertimeFormData | CustomFormData;
 
 export interface ApplicationHistoryEntry {
 	status: ApplicationStatus;
@@ -67,9 +100,11 @@ export interface ApplicationStatistics {
 }
 
 export const applicationTypeLabels: Record<ApplicationType, string> = {
-	leave: '请假申请',
+	travel: '差旅申请',
+	procurement: '采购申请',
 	reimbursement: '报销申请',
-	overtime: '加班申请'
+	overtime: '加班申请',
+	custom: '自定义申请'
 };
 
 export const applicationStatusLabels: Record<ApplicationStatus, string> = {

@@ -33,4 +33,4 @@ npm run lint
 npm run build
 ```
 
-当前数据使用本地 Mock Repository，申请类型包括请假、报销和加班。
+当前数据使用本地 Mock Repository，申请类型包括差旅、采购、报销、加班，并支持基于预设模板的自定义申请类型。

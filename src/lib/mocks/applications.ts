@@ -10,15 +10,16 @@ export const mockApplicants = [
 export const seedApplications: Application[] = [
 	{
 		id: 'APP-20260806-001',
-		type: 'leave',
+		type: 'travel',
 		applicant: mockApplicants[0],
 		formData: {
 			applicantName: '林晓',
 			department: '产品部',
-			leaveType: 'annual',
+			origin: '上海',
+			destination: '北京',
 			startDate: '2026-08-10',
 			endDate: '2026-08-12',
-			reason: '家庭事务'
+			reason: '客户现场会议'
 		},
 		status: 'pending',
 		submittedAt: '2026-08-06T09:00:00.000Z',
@@ -67,15 +68,15 @@ export const seedApplications: Application[] = [
 	},
 	{
 		id: 'APP-20260803-004',
-		type: 'leave',
+		type: 'procurement',
 		applicant: mockApplicants[3],
 		formData: {
 			applicantName: '高原',
 			department: '市场部',
-			leaveType: 'sick',
-			startDate: '2026-08-04',
-			endDate: '2026-08-04',
-			reason: '身体不适'
+			item: '活动宣传物料',
+			amount: 899,
+			purchaseDate: '2026-08-04',
+			reason: '市场活动物料采购'
 		},
 		status: 'rejected',
 		submittedAt: '2026-08-03T08:45:00.000Z',
@@ -120,6 +121,26 @@ export const seedApplications: Application[] = [
 		history: [
 			{ status: 'pending', changedAt: '2026-07-29T09:10:00.000Z' },
 			{ status: 'withdrawn', changedAt: '2026-07-29T17:00:00.000Z', comment: '申请人主动撤回' }
+		]
+	},
+	{
+		id: 'APP-20260727-007',
+		type: 'custom',
+		applicant: mockApplicants[1],
+		formData: {
+			applicantName: '周宁',
+			department: '销售部',
+			customTypeName: '培训申请',
+			customTemplate: 'general',
+			customDate: '2026-07-26',
+			reason: '参加业务培训'
+		},
+		status: 'approved',
+		submittedAt: '2026-07-27T09:00:00.000Z',
+		updatedAt: '2026-07-28T09:00:00.000Z',
+		history: [
+			{ status: 'pending', changedAt: '2026-07-27T09:00:00.000Z' },
+			{ status: 'approved', changedAt: '2026-07-28T09:00:00.000Z' }
 		]
 	}
 ];

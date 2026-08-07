@@ -9,6 +9,14 @@
 		value: ApplicationType;
 		onchange: (value: ApplicationType) => void;
 	} = $props();
+
+	const typeMarks: Record<ApplicationType, string> = {
+		travel: '差',
+		procurement: '采',
+		reimbursement: '费',
+		overtime: '时',
+		custom: '自'
+	};
 </script>
 
 <fieldset class="type-selector">
@@ -23,9 +31,7 @@
 					checked={value === type}
 					onchange={() => onchange(type)}
 				/>
-				<span class="type-option-mark" aria-hidden="true"
-					>{type === 'leave' ? '休' : type === 'reimbursement' ? '费' : '时'}</span
-				>
+				<span class="type-option-mark" aria-hidden="true">{typeMarks[type]}</span>
 				<span class="type-option-copy">
 					<strong>{applicationTypeConfigs[type].label}</strong>
 					<small>{applicationTypeConfigs[type].description}</small>

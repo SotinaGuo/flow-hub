@@ -1,58 +1,74 @@
 import type {
 	ApplicationFormData,
 	ApplicationType,
-	LeaveFormData,
+	CustomApplicationTemplate,
 	ReimbursementFormData
 } from './types';
+import { applicationTypes } from './config';
 
 export interface ApplicationFormDraft {
 	applicantName: string;
 	department: string;
 	reason: string;
-	leaveType: '' | LeaveFormData['leaveType'];
+	origin: string;
+	destination: string;
 	startDate: string;
 	endDate: string;
+	item: string;
+	purchaseDate: string;
 	reimbursementType: '' | ReimbursementFormData['reimbursementType'];
 	amount: string;
 	expenseDate: string;
 	workDate: string;
 	startTime: string;
 	endTime: string;
+	customTypeName: string;
+	customTemplate: '' | CustomApplicationTemplate;
+	customDate: string;
 }
 
-export function createInitialFormData(_type: ApplicationType): ApplicationFormDraft {
-	if (_type !== 'leave' && _type !== 'reimbursement' && _type !== 'overtime') {
-		throw new Error(`Unsupported application type: ${_type}`);
-	}
+export function createInitialFormData(type: ApplicationType): ApplicationFormDraft {
+	if (!applicationTypes.includes(type)) throw new Error(`Unsupported application type: ${type}`);
 
 	const shared = {
 		applicantName: '',
 		department: '',
 		reason: '',
-		leaveType: '' as const,
+		origin: '',
+		destination: '',
 		startDate: '',
 		endDate: '',
+		item: '',
+		purchaseDate: '',
 		reimbursementType: '' as const,
 		amount: '',
 		expenseDate: '',
 		workDate: '',
 		startTime: '',
-		endTime: ''
+		endTime: '',
+		customTypeName: '',
+		customTemplate: '' as const,
+		customDate: ''
 	};
 
 	return { ...shared };
-}
-
-function isLeaveType(
-	value: ApplicationFormDraft['leaveType']
-): value is LeaveFormData['leaveType'] {
-	return value === 'annual' || value === 'sick' || value === 'personal';
 }
 
 function isReimbursementType(
 	value: ApplicationFormDraft['reimbursementType']
 ): value is ReimbursementFormData['reimbursementType'] {
 	return value === 'travel' || value === 'meal' || value === 'equipment';
+}
+
+function isCustomTemplate(
+	value: ApplicationFormDraft['customTemplate']
+): value is CustomApplicationTemplate {
+	return value === 'general' || value === 'amount' || value === 'time';
+}
+
+function toPositiveAmount(value: string): number | null {
+	const amount = Number(value);
+	return Number.isFinite(amount) && amount > 0 ? amount : null;
 }
 
 function hasSharedFields(draft: ApplicationFormDraft): boolean {
@@ -65,13 +81,28 @@ export function toApplicationFormData(
 ): ApplicationFormData | null {
 	if (!hasSharedFields(draft)) return null;
 
-	if (type === 'leave' && isLeaveType(draft.leaveType) && draft.startDate && draft.endDate) {
+	if (type === 'travel' && draft.origin && draft.destination && draft.startDate && draft.endDate) {
 		return {
 			applicantName: draft.applicantName,
 			department: draft.department,
-			leaveType: draft.leaveType,
+			origin: draft.origin,
+			destination: draft.destination,
 			startDate: draft.startDate,
 			endDate: draft.endDate,
+			reason: draft.reason
+		};
+	}
+
+	if (type === 'procurement' && draft.item && draft.purchaseDate) {
+		const amount = toPositiveAmount(draft.amount);
+		if (amount === null) return null;
+
+		return {
+			applicantName: draft.applicantName,
+			department: draft.department,
+			item: draft.item,
+			amount,
+			purchaseDate: draft.purchaseDate,
 			reason: draft.reason
 		};
 	}
@@ -81,8 +112,8 @@ export function toApplicationFormData(
 		isReimbursementType(draft.reimbursementType) &&
 		draft.expenseDate
 	) {
-		const amount = Number(draft.amount);
-		if (!Number.isFinite(amount) || amount <= 0) return null;
+		const amount = toPositiveAmount(draft.amount);
+		if (amount === null) return null;
 
 		return {
 			applicantName: draft.applicantName,
@@ -103,6 +134,47 @@ export function toApplicationFormData(
 			endTime: draft.endTime,
 			reason: draft.reason
 		};
+	}
+
+	if (type === 'custom' && draft.customTypeName.trim() && isCustomTemplate(draft.customTemplate)) {
+		if (draft.customTemplate === 'general' && draft.customDate) {
+			return {
+				applicantName: draft.applicantName,
+				department: draft.department,
+				customTypeName: draft.customTypeName.trim(),
+				customTemplate: 'general',
+				customDate: draft.customDate,
+				reason: draft.reason
+			};
+		}
+
+		if (draft.customTemplate === 'amount' && draft.customDate) {
+			const amount = toPositiveAmount(draft.amount);
+			if (amount === null) return null;
+
+			return {
+				applicantName: draft.applicantName,
+				department: draft.department,
+				customTypeName: draft.customTypeName.trim(),
+				customTemplate: 'amount',
+				customDate: draft.customDate,
+				amount,
+				reason: draft.reason
+			};
+		}
+
+		if (draft.customTemplate === 'time' && draft.workDate && draft.startTime && draft.endTime) {
+			return {
+				applicantName: draft.applicantName,
+				department: draft.department,
+				customTypeName: draft.customTypeName.trim(),
+				customTemplate: 'time',
+				workDate: draft.workDate,
+				startTime: draft.startTime,
+				endTime: draft.endTime,
+				reason: draft.reason
+			};
+		}
 	}
 
 	return null;

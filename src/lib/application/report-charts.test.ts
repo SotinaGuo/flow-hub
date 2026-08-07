@@ -25,7 +25,7 @@ describe('report chart lifecycle', () => {
 				approved: 1,
 				rejected: 0,
 				withdrawn: 0,
-				byType: { leave: 1, reimbursement: 1, overtime: 0 }
+				byType: { travel: 1, procurement: 0, reimbursement: 1, overtime: 0, custom: 0 }
 			},
 			resizeTarget
 		);
@@ -33,6 +33,10 @@ describe('report chart lifecycle', () => {
 		expect(api.init).toHaveBeenCalledTimes(2);
 		expect(statusChart.setOption).toHaveBeenCalledOnce();
 		expect(typeChart.setOption).toHaveBeenCalledOnce();
+		const typeOption = typeChart.setOption.mock.calls[0][0] as {
+			xAxis: { data: string[] };
+		};
+		expect(typeOption.xAxis.data).toEqual(['差旅', '采购', '报销', '加班', '自定义']);
 
 		for (const listener of resizeListeners) listener();
 		expect(statusChart.resize).toHaveBeenCalledOnce();

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
-	import { applicationTypeLabels, type Application } from '$lib/application/types';
+	import { getApplicationTypeLabel } from '$lib/application/config';
+	import type { Application } from '$lib/application/types';
 	import { applicationRepository } from '$lib/application/repository';
 	import { getApplicationDetailRows } from '$lib/application/presentation';
 	import { getStatusLabel } from '$lib/application/status';
@@ -30,6 +31,13 @@
 			hour: '2-digit',
 			minute: '2-digit'
 		}).format(new Date(date));
+	}
+
+	function getTypeLabel(application: Application): string {
+		return getApplicationTypeLabel(
+			application.type,
+			'customTypeName' in application.formData ? application.formData.customTypeName : undefined
+		);
 	}
 
 	async function updateStatus(status: 'approved' | 'rejected' | 'withdrawn') {
@@ -77,7 +85,7 @@
 			<div class="detail-header">
 				<div>
 					<p class="detail-id">{application.id}</p>
-					<h2>{applicationTypeLabels[application.type]}</h2>
+					<h2>{getTypeLabel(application)}</h2>
 				</div>
 				<StatusBadge status={application.status} />
 			</div>

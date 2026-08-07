@@ -12,7 +12,7 @@
 		approved: 0,
 		rejected: 0,
 		withdrawn: 0,
-		byType: { leave: 0, reimbursement: 0, overtime: 0 }
+		byType: { travel: 0, procurement: 0, reimbursement: 0, overtime: 0, custom: 0 }
 	};
 	let statistics = $state<ApplicationStatistics>(emptyStatistics);
 	let loading = $state(true);
