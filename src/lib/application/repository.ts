@@ -1,3 +1,5 @@
+import { canApprove } from '$lib/auth/permissions';
+import type { User } from '$lib/auth/types';
 import { seedApplications } from '$lib/mocks/applications';
 import { transitionStatus } from './status';
 import type {
@@ -62,10 +64,12 @@ class MockApplicationRepository {
 	async updateStatus(
 		id: string,
 		nextStatus: ApplicationStatus,
+		actor: User,
 		comment?: string
 	): Promise<Application> {
 		const application = this.applications.find((item) => item.id === id);
 		if (!application) throw new Error('Application not found');
+		if (!canApprove(actor)) throw new Error('approval permission required');
 
 		const now = new Date().toISOString();
 		application.status = transitionStatus(application.status, nextStatus);

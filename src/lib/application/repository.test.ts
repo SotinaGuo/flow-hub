@@ -1,6 +1,21 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { Applicant, TravelFormData } from './types';
 import { applicationRepository } from './repository';
+import type { User } from '$lib/auth/types';
+
+const applicantUser: User = {
+	id: 'user-applicant-001',
+	name: '申请人',
+	email: 'applicant@example.com',
+	role: 'applicant'
+};
+
+const approverUser: User = {
+	id: 'user-approver-001',
+	name: '审批人',
+	email: 'approver@example.com',
+	role: 'approver'
+};
 
 describe('application repository filters', () => {
 	beforeEach(async () => {
@@ -43,5 +58,23 @@ describe('application repository filters', () => {
 			applicant,
 			formData
 		});
+	});
+
+	it('rejects status updates from applicants without changing history', async () => {
+		const before = await applicationRepository.getById('APP-20260806-001');
+
+		await expect(
+			applicationRepository.updateStatus('APP-20260806-001', 'approved', applicantUser)
+		).rejects.toThrow('approval permission required');
+
+		const after = await applicationRepository.getById('APP-20260806-001');
+		expect(after?.status).toBe(before?.status);
+		expect(after?.history).toEqual(before?.history);
+	});
+
+	it('allows approvers to update a pending application', async () => {
+		await expect(
+			applicationRepository.updateStatus('APP-20260806-001', 'approved', approverUser)
+		).resolves.toMatchObject({ status: 'approved' });
 	});
 });
