@@ -2,22 +2,26 @@
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import { getApplicationTypeLabel } from '$lib/application/config';
+	import { getSubmissionFeedback } from '$lib/application/submission-feedback';
 	import type { Application } from '$lib/application/types';
 	import { applicationRepository } from '$lib/application/repository';
 	import { getApplicationDetailRows } from '$lib/application/presentation';
 	import { getStatusLabel } from '$lib/application/status';
 	import StatusBadge from '$lib/components/application/StatusBadge.svelte';
 
-	let { data }: { data: { id: string } } = $props();
+	let { data }: { data: { id: string; submitted?: boolean } } = $props();
 	let application = $state<Application | null>(null);
 	let loading = $state(true);
 	let processing = $state(false);
 	let feedback = $state('');
+	let feedbackTone = $state<'success' | 'error'>('success');
 
 	onMount(async () => {
+		feedback = getSubmissionFeedback(data.submitted ?? false);
 		try {
 			application = (await applicationRepository.getById(data.id)) ?? null;
 		} catch (error) {
+			feedbackTone = 'error';
 			feedback = error instanceof Error ? error.message : '申请加载失败，请稍后重试';
 		} finally {
 			loading = false;
@@ -43,11 +47,13 @@
 	async function updateStatus(status: 'approved' | 'rejected' | 'withdrawn') {
 		if (!application) return;
 		processing = true;
+		feedbackTone = 'success';
 		feedback = '';
 		try {
 			application = await applicationRepository.updateStatus(application.id, status);
 			feedback = `申请已更新为“${getStatusLabel(status)}”`;
 		} catch (error) {
+			feedbackTone = 'error';
 			feedback = error instanceof Error ? error.message : '状态更新失败';
 		} finally {
 			processing = false;
@@ -78,7 +84,16 @@
 		<a class="button primary" href={resolve('/applications')}>返回申请列表</a>
 	</div>
 {:else}
-	{#if feedback}<p class="feedback">{feedback}</p>{/if}
+	{#if feedback}
+		<p
+			class:feedback-error={feedbackTone === 'error'}
+			class="feedback"
+			role={feedbackTone === 'error' ? 'alert' : 'status'}
+			aria-live="polite"
+		>
+			{feedback}
+		</p>
+	{/if}
 
 	<div class="detail-layout">
 		<section class="surface detail-card">

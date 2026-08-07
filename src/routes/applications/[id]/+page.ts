@@ -1,3 +1,3 @@
-export function load({ params }) {
-	return { id: params.id };
+export function load({ params, url }) {
+	return { id: params.id, submitted: url.searchParams.get('submitted') === '1' };
 }

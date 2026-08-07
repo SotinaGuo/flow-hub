@@ -907,6 +907,10 @@ textarea {
 	padding: 10px 12px;
 	font-size: 12px;
 }
+.feedback-error {
+	background: #fff0eb;
+	color: #b55645;
+}
 @media (max-width: 980px) {
 	.sidebar {
 		width: 205px;

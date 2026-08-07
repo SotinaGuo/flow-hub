@@ -26,6 +26,7 @@
 	let previewing = $state(false);
 	let submitting = $state(false);
 	let feedback = $state('');
+	let submitFeedback = $state<{ tone: 'success' | 'error'; message: string } | null>(null);
 	let previewApplication = $state<Application | null>(null);
 
 	function changeType(type: ApplicationType) {
@@ -34,11 +35,13 @@
 		errors = {};
 		previewing = false;
 		feedback = '';
+		submitFeedback = null;
 	}
 
 	function changeForm(nextValue: ApplicationFormDraft) {
 		formData = nextValue;
 		feedback = '';
+		submitFeedback = null;
 	}
 
 	function getApplicant(): Applicant {
@@ -77,15 +80,19 @@
 	async function submitApplication() {
 		if (!previewApplication || submitting) return;
 		submitting = true;
+		submitFeedback = null;
 		try {
 			const application = await applicationRepository.create(
 				selectedType,
 				getApplicant(),
 				previewApplication.formData
 			);
-			await goto(resolve('/applications/[id]', { id: application.id }));
+			await goto(resolve('/applications/[id]?submitted=1', { id: application.id }));
 		} catch (error) {
-			feedback = error instanceof Error ? error.message : '提交申请失败，请稍后重试';
+			submitFeedback = {
+				tone: 'error',
+				message: error instanceof Error ? error.message : '提交申请失败，请稍后重试'
+			};
 		} finally {
 			submitting = false;
 		}
@@ -115,6 +122,7 @@
 		onedit={() => (previewing = false)}
 		onsubmit={submitApplication}
 		{submitting}
+		feedback={submitFeedback}
 	/>
 	{#if submitting}<div class="loading-state">正在提交申请…</div>{/if}
 {:else}
