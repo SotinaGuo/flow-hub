@@ -14,7 +14,7 @@
 		type ApplicationFormDraft
 	} from '$lib/application/form';
 	import { getApplicantByName, listApplicants } from '$lib/application/applicants';
-	import { validateApplicationForm, type ApplicationFormErrors } from '$lib/application/validation';
+	import { getLiveValidationErrors, type ApplicationFormErrors } from '$lib/application/validation';
 	import ApplicationForm from '$lib/components/application/ApplicationForm.svelte';
 	import ApplicationPreview from '$lib/components/application/ApplicationPreview.svelte';
 	import ApplicationTypeSelector from '$lib/components/application/ApplicationTypeSelector.svelte';
@@ -26,6 +26,7 @@
 	let previewing = $state(false);
 	let submitting = $state(false);
 	let feedback = $state('');
+	let validationStarted = $state(false);
 	let submitFeedback = $state<{ tone: 'success' | 'error'; message: string } | null>(null);
 	let previewApplication = $state<Application | null>(null);
 
@@ -33,6 +34,7 @@
 		selectedType = type;
 		formData = createInitialFormData(type);
 		errors = {};
+		validationStarted = false;
 		previewing = false;
 		feedback = '';
 		submitFeedback = null;
@@ -40,6 +42,7 @@
 
 	function changeForm(nextValue: ApplicationFormDraft) {
 		formData = nextValue;
+		errors = getLiveValidationErrors(selectedType, nextValue, validationStarted);
 		feedback = '';
 		submitFeedback = null;
 	}
@@ -51,7 +54,8 @@
 	}
 
 	function handlePreview() {
-		const nextErrors = validateApplicationForm(selectedType, formData);
+		validationStarted = true;
+		const nextErrors = getLiveValidationErrors(selectedType, formData, true);
 		errors = nextErrors;
 		if (Object.keys(nextErrors).length > 0) {
 			feedback = '请先完善标记为必填的字段';

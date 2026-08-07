@@ -738,6 +738,9 @@ textarea {
 .preview-person span {
 	display: block;
 }
+.preview-person span.profile-avatar {
+	display: grid;
+}
 .preview-person strong {
 	color: var(--ink);
 	font-size: 14px;
@@ -898,6 +901,14 @@ textarea {
 }
 .action-stack .button {
 	width: 100%;
+}
+.permission-notice {
+	margin: 0;
+	border-radius: 5px;
+	background: #f3f0e8;
+	color: var(--muted);
+	padding: 10px 12px;
+	font-size: 12px;
 }
 .feedback {
 	margin: 0 0 14px;

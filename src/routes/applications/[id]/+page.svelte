@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
+	import { currentUser } from '$lib/auth/session';
 	import { getApplicationTypeLabel } from '$lib/application/config';
 	import { getSubmissionFeedback } from '$lib/application/submission-feedback';
 	import type { Application } from '$lib/application/types';
 	import { applicationRepository } from '$lib/application/repository';
 	import { getApplicationDetailRows } from '$lib/application/presentation';
 	import { getStatusLabel } from '$lib/application/status';
+	import ApprovalActions from '$lib/components/application/ApprovalActions.svelte';
 	import StatusBadge from '$lib/components/application/StatusBadge.svelte';
 
 	let { data }: { data: { id: string; submitted?: boolean } } = $props();
@@ -50,7 +52,7 @@
 		feedbackTone = 'success';
 		feedback = '';
 		try {
-			application = await applicationRepository.updateStatus(application.id, status);
+			application = await applicationRepository.updateStatus(application.id, status, currentUser);
 			feedback = `申请已更新为“${getStatusLabel(status)}”`;
 		} catch (error) {
 			feedbackTone = 'error';
@@ -143,27 +145,12 @@
 						</div>{/each}
 				</div>
 			</div>
-			{#if application.status === 'pending'}
-				<div class="detail-content-section">
-					<h3>处理申请</h3>
-					<div class="action-stack">
-						<button
-							class="button primary"
-							disabled={processing}
-							onclick={() => updateStatus('approved')}
-							>通过申请 <span aria-hidden="true">✓</span></button
-						><button
-							class="button secondary"
-							disabled={processing}
-							onclick={() => updateStatus('rejected')}>驳回申请</button
-						><button
-							class="button secondary"
-							disabled={processing}
-							onclick={() => updateStatus('withdrawn')}>撤回申请</button
-						>
-					</div>
-				</div>
-			{/if}
+			<ApprovalActions
+				status={application.status}
+				user={currentUser}
+				{processing}
+				onupdate={updateStatus}
+			/>
 		</aside>
 	</div>
 {/if}
