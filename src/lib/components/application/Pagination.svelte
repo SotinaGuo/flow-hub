@@ -1,14 +1,14 @@
 <script lang="ts">
-	const pageSize = 10;
-
 	let {
 		page,
 		pageCount,
+		pageSize = 10,
 		total,
 		onpagechange
 	}: {
 		page: number;
 		pageCount: number;
+		pageSize?: number;
 		total: number;
 		onpagechange: (page: number) => void;
 	} = $props();

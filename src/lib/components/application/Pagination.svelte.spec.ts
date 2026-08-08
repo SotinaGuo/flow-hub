@@ -51,6 +51,18 @@ test('renders the last page range and disables next page', async () => {
 	await expect.element(screen.getByRole('button', { name: '下一页' })).toBeDisabled();
 });
 
+test('uses the provided page size for the range summary', async () => {
+	const screen = await render(Pagination, {
+		page: 2,
+		pageCount: 3,
+		pageSize: 20,
+		total: 45,
+		onpagechange: () => undefined
+	});
+
+	await expect.element(screen.getByText('第 21-40 条，共 45 条')).toBeVisible();
+});
+
 test('calls onpagechange with the previous page when page is 2', async () => {
 	const onpagechange = vi.fn();
 	const screen = await render(Pagination, {

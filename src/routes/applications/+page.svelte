@@ -101,6 +101,7 @@
 		<Pagination
 			page={pagination.page}
 			pageCount={pagination.pageCount}
+			{pageSize}
 			total={pagination.total}
 			onpagechange={changePage}
 		/>
