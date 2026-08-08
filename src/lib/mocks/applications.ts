@@ -536,15 +536,10 @@ export const seedApplications: Application[] = [
 			expenseDate: '2026-07-08',
 			reason: '城市差旅交通'
 		},
-		status: 'approved',
+		status: 'pending',
 		submittedAt: '2026-07-09T09:00:00.000Z',
-		updatedAt: '2026-07-09T15:00:00.000Z',
-		history: createHistory(
-			'approved',
-			'2026-07-09T09:00:00.000Z',
-			'2026-07-09T15:00:00.000Z',
-			'已核准'
-		)
+		updatedAt: '2026-07-09T09:00:00.000Z',
+		history: createHistory('pending', '2026-07-09T09:00:00.000Z', '2026-07-09T09:00:00.000Z')
 	},
 	{
 		id: 'APP-20260708-026',
@@ -558,14 +553,14 @@ export const seedApplications: Application[] = [
 			endTime: '21:30',
 			reason: '发布前验收'
 		},
-		status: 'rejected',
+		status: 'approved',
 		submittedAt: '2026-07-08T09:00:00.000Z',
 		updatedAt: '2026-07-08T16:00:00.000Z',
 		history: createHistory(
-			'rejected',
+			'approved',
 			'2026-07-08T09:00:00.000Z',
 			'2026-07-08T16:00:00.000Z',
-			'人力不足'
+			'同意加班'
 		)
 	},
 	{
