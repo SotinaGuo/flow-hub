@@ -28,6 +28,17 @@ test('renders the first page range and pagination controls', async () => {
 	expect(onpagechange).toHaveBeenNthCalledWith(2, 2);
 });
 
+test('renders nothing when pageCount is 1 or less', async () => {
+	const screen = await render(Pagination, {
+		page: 1,
+		pageCount: 1,
+		total: 35,
+		onpagechange: () => undefined
+	});
+
+	await expect.element(screen.getByRole('navigation', { name: '分页' })).not.toBeInTheDocument();
+});
+
 test('renders the last page range and disables next page', async () => {
 	const screen = await render(Pagination, {
 		page: 4,
@@ -38,4 +49,18 @@ test('renders the last page range and disables next page', async () => {
 
 	await expect.element(screen.getByText('第 31-35 条，共 35 条')).toBeVisible();
 	await expect.element(screen.getByRole('button', { name: '下一页' })).toBeDisabled();
+});
+
+test('calls onpagechange with the previous page when page is 2', async () => {
+	const onpagechange = vi.fn();
+	const screen = await render(Pagination, {
+		page: 2,
+		pageCount: 4,
+		total: 35,
+		onpagechange
+	});
+
+	await screen.getByRole('button', { name: '上一页' }).click();
+
+	expect(onpagechange).toHaveBeenNthCalledWith(1, 1);
 });
