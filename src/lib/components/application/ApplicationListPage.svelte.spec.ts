@@ -21,6 +21,7 @@ test('resets to page 1 after changing filters', async () => {
 
 	await page.getByRole('button', { name: '第 4 页' }).click();
 	await expect.element(page.getByText('第 31-35 条，共 35 条')).toBeInTheDocument();
+	expect(page.getByRole('row')).toHaveLength(6);
 
 	await page.getByLabelText('当前状态').selectOptions('approved');
 

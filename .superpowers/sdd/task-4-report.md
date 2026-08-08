@@ -119,9 +119,28 @@ npm run build
 
 ## Commit
 
-- Commit SHA: `8a68501`
+- Commit SHA: `18af89b`
 - Commit message: `feat: paginate application list`
 
 ## 剩余风险
 
 - 本次未改动 `ApplicationTable.svelte` 和 `src/routes/layout.css`，因为现有表格渲染与分页样式已满足任务要求；后续若列表工具栏或分页布局继续调整，可能需要补充视觉回归检查。
+
+## 修复记录
+
+- 修复点：补强 `src/lib/components/application/ApplicationListPage.svelte.spec.ts` 中第 4 页验收，先确认切到“第 4 页”后显示“第 31-35 条，共 35 条”，再断言表格可见行数为 6 行（1 行表头 + 5 行数据），避免只验证范围文本。
+- 命令输出：
+  - `npm test -- src/lib/components/application/ApplicationListPage.svelte.spec.ts`
+    - `Test Files  1 passed (1)`
+    - `Tests  2 passed (2)`
+  - `npx prettier --check src/lib/components/application/ApplicationListPage.svelte.spec.ts`
+    - `All matched files use Prettier code style!`
+  - `npx eslint src/lib/components/application/ApplicationListPage.svelte.spec.ts`
+    - 退出码 0，无输出
+  - `npm run check`
+    - `svelte-check found 0 errors and 0 warnings`
+  - `npm run build`
+    - `✓ built in 474ms`
+    - `✔ done`
+- Commit SHA：待生成
+- 剩余风险：仅覆盖到当前分页展示逻辑的回归断言；如果后续表格结构调整，可能需要同步更新行数断言。
