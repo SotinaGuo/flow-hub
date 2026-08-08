@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
+	import { paginate } from '$lib/application/pagination';
 	import { applicationRepository } from '$lib/application/repository';
 	import {
 		applicationTypeLabels,
@@ -9,12 +10,16 @@
 		type ApplicationType
 	} from '$lib/application/types';
 	import ApplicationTable from '$lib/components/application/ApplicationTable.svelte';
+	import Pagination from '$lib/components/application/Pagination.svelte';
 
+	const pageSize = 10;
 	let applications = $state<Application[]>([]);
 	let loading = $state(true);
 	let errorMessage = $state('');
 	let typeFilter = $state<ApplicationType | 'all'>('all');
 	let statusFilter = $state<ApplicationStatus | 'all'>('all');
+	let currentPage = $state(1);
+	const pagination = $derived(paginate(applications, currentPage, pageSize));
 
 	async function loadApplications() {
 		loading = true;
@@ -31,14 +36,23 @@
 
 	onMount(loadApplications);
 
+	function refreshApplications() {
+		currentPage = 1;
+		void loadApplications();
+	}
+
 	function updateType(event: Event) {
 		typeFilter = (event.currentTarget as HTMLSelectElement).value as ApplicationType | 'all';
-		void loadApplications();
+		refreshApplications();
 	}
 
 	function updateStatus(event: Event) {
 		statusFilter = (event.currentTarget as HTMLSelectElement).value as ApplicationStatus | 'all';
-		void loadApplications();
+		refreshApplications();
+	}
+
+	function changePage(page: number) {
+		currentPage = page;
 	}
 </script>
 
@@ -82,5 +96,13 @@
 			<h3>暂时无法加载</h3>
 			<p>{errorMessage}</p>
 			<button class="button primary" type="button" onclick={loadApplications}>重新加载</button>
-		</div>{:else}<ApplicationTable {applications} />{/if}
+		</div>{:else}
+		<ApplicationTable applications={pagination.items} />
+		<Pagination
+			page={pagination.page}
+			pageCount={pagination.pageCount}
+			total={pagination.total}
+			onpagechange={changePage}
+		/>
+	{/if}
 </section>
