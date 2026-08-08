@@ -496,6 +496,44 @@ textarea:focus-visible {
 .filter-spacer {
 	flex: 1;
 }
+.pagination {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 18px;
+}
+.pagination-summary {
+	margin: 0;
+	color: var(--muted);
+	font-size: 12px;
+}
+.pagination-controls,
+.pagination-pages {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+.pagination-button {
+	min-width: 42px;
+	padding-inline: 14px;
+}
+.pagination-button[data-current='true'] {
+	border-color: var(--ink);
+	background: var(--ink);
+	color: #fffaf1;
+}
+.pagination-button[data-current='true']:hover {
+	background: #2a3b41;
+}
+.pagination-button:disabled {
+	cursor: not-allowed;
+	border-color: #e6e0d6;
+	background: #f4f1eb;
+	color: #b0a89c;
+}
 select,
 input,
 textarea {
@@ -937,6 +975,9 @@ textarea {
 	.chart-grid {
 		grid-template-columns: 1fr;
 	}
+	.pagination {
+		align-items: start;
+	}
 }
 @media (max-width: 680px) {
 	.app-shell {
@@ -1046,6 +1087,13 @@ textarea {
 	}
 	.filter-bar {
 		align-items: stretch;
+	}
+	.pagination {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.pagination-controls {
+		justify-content: space-between;
 	}
 	.filter-field {
 		flex: 1 1 100%;
