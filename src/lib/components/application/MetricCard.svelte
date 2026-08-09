@@ -8,7 +8,7 @@
 </script>
 
 <article class={`metric-card accent-${accent}`}>
-	<div class="metric-label">{label}<span class="metric-line"></span></div>
+	<div class="metric-label">{label}</div>
 	<strong class="metric-value">{value}</strong>
 	<span class="metric-detail">{detail}</span>
 </article>
