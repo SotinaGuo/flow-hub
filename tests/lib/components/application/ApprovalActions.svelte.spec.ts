@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import type { User } from '$lib/auth/types';
-import ApprovalActions from '$lib/components/approval/ApprovalActions.svelte';
+import ApprovalActions from '$lib/components/application/ApprovalActions.svelte';
 
 const applicant: User = {
 	id: 'user-applicant-001',

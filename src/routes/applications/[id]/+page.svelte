@@ -8,7 +8,7 @@
 	import { applicationRepository } from '$lib/application/repository';
 	import { getApplicationDetailRows } from '$lib/application/presentation';
 	import { getStatusLabel } from '$lib/application/status';
-	import ApprovalActions from '$lib/components/approval/ApprovalActions.svelte';
+	import ApprovalActions from '$lib/components/application/ApprovalActions.svelte';
 	import StatusBadge from '$lib/components/application/StatusBadge.svelte';
 
 	let { data }: { data: { id: string; submitted?: boolean } } = $props();
