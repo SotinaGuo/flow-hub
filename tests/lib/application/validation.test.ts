@@ -70,6 +70,53 @@ describe('application form validation', () => {
 		expect(overtimeErrors.endTime).toBe('结束时间必须晚于开始时间');
 	});
 
+	it('requires overtime start and end dates', () => {
+		const errors = validateApplicationForm('overtime', {
+			applicantName: '陈默',
+			department: '技术部',
+			startTime: '18:30',
+			endTime: '21:00',
+			reason: '版本发布'
+		});
+
+		expect(errors).toMatchObject({
+			startDate: '请选择开始日期',
+			endDate: '请选择结束日期'
+		});
+	});
+
+	it('accepts a same-day or multi-day overtime date range', () => {
+		const base = {
+			applicantName: '陈默',
+			department: '技术部',
+			startTime: '18:30',
+			endTime: '21:00',
+			reason: '版本发布'
+		};
+
+		expect(
+			validateApplicationForm('overtime', {
+				...base,
+				startDate: '2026-08-10',
+				endDate: '2026-08-10'
+			})
+		).toEqual({});
+		expect(
+			validateApplicationForm('overtime', {
+				...base,
+				startDate: '2026-08-10',
+				endDate: '2026-08-12'
+			})
+		).toEqual({});
+		expect(
+			validateApplicationForm('overtime', {
+				...base,
+				startDate: '2026-08-12',
+				endDate: '2026-08-10'
+			}).endDate
+		).toBe('结束日期不能早于开始日期');
+	});
+
 	it('requires a custom type name, template and template fields', () => {
 		const errors = validateApplicationForm('custom', {
 			applicantName: '林晓',
