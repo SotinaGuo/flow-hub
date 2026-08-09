@@ -102,7 +102,8 @@ export const seedApplications: Application[] = [
 		formData: {
 			applicantName: '陈默',
 			department: '技术部',
-			workDate: '2026-08-01',
+			startDate: '2026-08-01',
+			endDate: '2026-08-02',
 			startTime: '18:30',
 			endTime: '21:00',
 			reason: '完成版本发布和线上验证'
@@ -136,7 +137,8 @@ export const seedApplications: Application[] = [
 		formData: {
 			applicantName: '陈默',
 			department: '技术部',
-			workDate: '2026-07-28',
+			startDate: '2026-07-28',
+			endDate: '2026-07-28',
 			startTime: '19:00',
 			endTime: '22:30',
 			reason: '处理线上告警'
@@ -237,7 +239,8 @@ export const seedApplications: Application[] = [
 		formData: {
 			applicantName: '陈默',
 			department: '技术部',
-			workDate: '2026-07-22',
+			startDate: '2026-07-22',
+			endDate: '2026-07-22',
 			startTime: '19:00',
 			endTime: '22:00',
 			reason: '线上故障处理'
@@ -343,7 +346,8 @@ export const seedApplications: Application[] = [
 		formData: {
 			applicantName: '高原',
 			department: '市场部',
-			workDate: '2026-07-17',
+			startDate: '2026-07-17',
+			endDate: '2026-07-17',
 			startTime: '18:00',
 			endTime: '21:30',
 			reason: '月度报表整理'
@@ -445,7 +449,8 @@ export const seedApplications: Application[] = [
 		formData: {
 			applicantName: '高原',
 			department: '市场部',
-			workDate: '2026-07-12',
+			startDate: '2026-07-12',
+			endDate: '2026-07-12',
 			startTime: '20:00',
 			endTime: '23:00',
 			reason: '值班确认'
@@ -548,7 +553,8 @@ export const seedApplications: Application[] = [
 		formData: {
 			applicantName: '周宁',
 			department: '销售部',
-			workDate: '2026-07-07',
+			startDate: '2026-07-07',
+			endDate: '2026-07-07',
 			startTime: '18:30',
 			endTime: '21:30',
 			reason: '发布前验收'
@@ -654,7 +660,8 @@ export const seedApplications: Application[] = [
 		formData: {
 			applicantName: '陈默',
 			department: '技术部',
-			workDate: '2026-07-02',
+			startDate: '2026-07-02',
+			endDate: '2026-07-02',
 			startTime: '19:00',
 			endTime: '22:00',
 			reason: '夜间排障'

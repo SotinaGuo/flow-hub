@@ -37,7 +37,8 @@ export interface ReimbursementFormData extends SharedFormData {
 }
 
 export interface OvertimeFormData extends SharedFormData {
-	workDate: string;
+	startDate: string;
+	endDate: string;
 	startTime: string;
 	endTime: string;
 }

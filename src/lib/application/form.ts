@@ -125,11 +125,12 @@ export function toApplicationFormData(
 		};
 	}
 
-	if (type === 'overtime' && draft.workDate && draft.startTime && draft.endTime) {
+	if (type === 'overtime' && draft.startDate && draft.endDate && draft.startTime && draft.endTime) {
 		return {
 			applicantName: draft.applicantName,
 			department: draft.department,
-			workDate: draft.workDate,
+			startDate: draft.startDate,
+			endDate: draft.endDate,
 			startTime: draft.startTime,
 			endTime: draft.endTime,
 			reason: draft.reason

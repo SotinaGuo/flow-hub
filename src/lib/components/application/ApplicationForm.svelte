@@ -280,13 +280,22 @@
 		{:else}
 			<div class="form-grid two-columns">
 				<label class="field">
-					<span>加班日期 <b>*</b></span>
+					<span>开始日期 <b>*</b></span>
 					<input
 						type="date"
-						value={value.workDate}
-						onchange={(event) => update('workDate', inputValue(event))}
+						value={value.startDate}
+						onchange={(event) => update('startDate', inputValue(event))}
 					/>
-					{#if errors.workDate}<small class="field-error">{errors.workDate}</small>{/if}
+					{#if errors.startDate}<small class="field-error">{errors.startDate}</small>{/if}
+				</label>
+				<label class="field">
+					<span>结束日期 <b>*</b></span>
+					<input
+						type="date"
+						value={value.endDate}
+						onchange={(event) => update('endDate', inputValue(event))}
+					/>
+					{#if errors.endDate}<small class="field-error">{errors.endDate}</small>{/if}
 				</label>
 				<label class="field">
 					<span>开始时间 <b>*</b></span>

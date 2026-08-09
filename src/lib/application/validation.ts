@@ -52,9 +52,17 @@ export function validateApplicationForm(
 	}
 
 	if (type === 'overtime') {
-		required(values.workDate, '请选择加班日期', errors, 'workDate');
+		required(values.startDate, '请选择开始日期', errors, 'startDate');
+		required(values.endDate, '请选择结束日期', errors, 'endDate');
 		required(values.startTime, '请选择开始时间', errors, 'startTime');
 		required(values.endTime, '请选择结束时间', errors, 'endTime');
+		if (
+			typeof values.startDate === 'string' &&
+			typeof values.endDate === 'string' &&
+			values.startDate > values.endDate
+		) {
+			errors.endDate = '结束日期不能早于开始日期';
+		}
 		if (
 			typeof values.startTime === 'string' &&
 			typeof values.endTime === 'string' &&
