@@ -100,7 +100,7 @@ export function getApplicationSummary(application: Pick<Application, 'type' | 'f
 		const overtimeDate =
 			application.formData.startDate === application.formData.endDate
 				? application.formData.startDate
-				: `${application.formData.startDate} 至 ${application.formData.endDate}`;
+				: `${application.formData.startDate} - ${application.formData.endDate}`;
 
 		return `${overtimeDate} ${application.formData.startTime} - ${application.formData.endTime}`;
 	}
