@@ -26,8 +26,19 @@ test('shows submission errors in the preview state', async () => {
 });
 
 test('renders overtime date ranges in the preview', async () => {
+	const overtimeApplication = seedApplications.find(
+		(application) =>
+			application.type === 'overtime' &&
+			'startDate' in application.formData &&
+			'endDate' in application.formData &&
+			application.formData.startDate === '2026-08-01' &&
+			application.formData.endDate === '2026-08-02'
+	);
+
+	expect(overtimeApplication).toBeDefined();
+
 	const screen = await render(ApplicationPreview, {
-		application: seedApplications[3],
+		application: overtimeApplication!,
 		onedit: () => undefined,
 		onsubmit: () => undefined
 	});

@@ -38,7 +38,9 @@ describe('application presentation', () => {
 		expect(travel && getApplicationSummary(travel)).toBe('2026-08-10 - 2026-08-12');
 		expect(procurement && getApplicationSummary(procurement)).toBe('¥899');
 		expect(reimbursement && getApplicationSummary(reimbursement)).toBe('¥1,280');
-		expect(overtime && getApplicationSummary(overtime)).toBe('2026-08-01 - 2026-08-02 18:30 - 21:00');
+		expect(overtime && getApplicationSummary(overtime)).toBe(
+			'2026-08-01 - 2026-08-02 18:30 - 21:00'
+		);
 		expect(custom && getApplicationSummary(custom)).toBe('2026-07-26');
 	});
 
