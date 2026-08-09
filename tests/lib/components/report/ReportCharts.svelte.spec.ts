@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import ReportCharts from '$lib/components/application/ReportCharts.svelte';
+import ReportCharts from '$lib/components/report/ReportCharts.svelte';
 
 test('shows an empty state for both charts when there is no data', async () => {
 	render(ReportCharts, {

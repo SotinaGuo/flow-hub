@@ -5,7 +5,7 @@
 	import { getApplicationStatistics } from '$lib/application/statistics';
 	import type { Application, ApplicationStatistics } from '$lib/application/types';
 	import ApplicationTable from '$lib/components/application/ApplicationTable.svelte';
-	import MetricCard from '$lib/components/application/MetricCard.svelte';
+	import MetricCard from '$lib/components/report/MetricCard.svelte';
 
 	const emptyStatistics: ApplicationStatistics = {
 		total: 0,

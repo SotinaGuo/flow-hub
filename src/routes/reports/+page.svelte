@@ -3,8 +3,8 @@
 	import { applicationRepository } from '$lib/application/repository';
 	import { getApplicationStatistics } from '$lib/application/statistics';
 	import type { ApplicationStatistics } from '$lib/application/types';
-	import MetricCard from '$lib/components/application/MetricCard.svelte';
-	import ReportCharts from '$lib/components/application/ReportCharts.svelte';
+	import MetricCard from '$lib/components/report/MetricCard.svelte';
+	import ReportCharts from '$lib/components/report/ReportCharts.svelte';
 
 	const emptyStatistics: ApplicationStatistics = {
 		total: 0,
