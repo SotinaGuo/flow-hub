@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { canApprove } from './permissions';
-import type { User } from './types';
+import { canApprove } from '$lib/auth/permissions';
+import type { User } from '$lib/auth/types';
 
 function user(role: User['role']): User {
 	return {

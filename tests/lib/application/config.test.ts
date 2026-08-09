@@ -4,7 +4,7 @@ import {
 	applicationTypes,
 	customApplicationTemplates,
 	getApplicationFieldLabel
-} from './config';
+} from '$lib/application/config';
 
 describe('application type configuration', () => {
 	it('defines every supported application type in one registry', () => {

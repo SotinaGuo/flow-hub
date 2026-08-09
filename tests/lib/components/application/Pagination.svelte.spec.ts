@@ -1,6 +1,6 @@
 import { expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import Pagination from './Pagination.svelte';
+import Pagination from '$lib/components/application/Pagination.svelte';
 
 test('renders the first page range and pagination controls', async () => {
 	const onpagechange = vi.fn();

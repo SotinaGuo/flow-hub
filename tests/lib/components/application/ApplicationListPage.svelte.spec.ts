@@ -2,7 +2,7 @@ import { beforeEach, expect, test } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { applicationRepository } from '$lib/application/repository';
-import ApplicationsPage from '../../../routes/applications/+page.svelte';
+import ApplicationsPage from '../../../../src/routes/applications/+page.svelte';
 
 beforeEach(async () => {
 	await applicationRepository.reset();

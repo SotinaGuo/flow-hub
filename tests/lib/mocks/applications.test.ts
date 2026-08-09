@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { seedApplications } from './applications';
+import { seedApplications } from '$lib/mocks/applications';
 
 describe('seed applications', () => {
 	it('contains 35 detail-ready applications', () => {

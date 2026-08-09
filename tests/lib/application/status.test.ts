@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canTransition, getStatusLabel, transitionStatus } from './status';
+import { canTransition, getStatusLabel, transitionStatus } from '$lib/application/status';
 
 describe('application status workflow', () => {
 	it('allows pending applications to be approved, rejected, or withdrawn', () => {

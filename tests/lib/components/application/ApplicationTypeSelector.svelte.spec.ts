@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import ApplicationTypeSelector from './ApplicationTypeSelector.svelte';
+import ApplicationTypeSelector from '$lib/components/application/ApplicationTypeSelector.svelte';
 
 test('renders all supported application types', async () => {
 	render(ApplicationTypeSelector, { value: 'travel', onchange: () => undefined });

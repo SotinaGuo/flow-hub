@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { setupReportCharts } from './report-charts';
+import { setupReportCharts } from '$lib/application/report-charts';
 
 describe('report chart lifecycle', () => {
 	it('initializes, resizes, and disposes both charts', () => {

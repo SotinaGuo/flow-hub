@@ -13,7 +13,7 @@ export default defineConfig({
 				test: {
 					name: 'unit',
 					environment: 'node',
-					include: ['src/**/*.test.ts']
+					include: ['tests/**/*.test.ts']
 				}
 			},
 			{
@@ -25,7 +25,7 @@ export default defineConfig({
 						provider: playwright(),
 						instances: [{ browser: 'chromium', headless: true }]
 					},
-					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					include: ['tests/**/*.svelte.{test,spec}.{js,ts}'],
 					exclude: ['src/lib/server/**']
 				}
 			}

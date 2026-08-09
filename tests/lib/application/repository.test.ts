@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import type { Applicant, TravelFormData } from './types';
-import { applicationRepository } from './repository';
+import type { Applicant, TravelFormData } from '$lib/application/types';
+import { applicationRepository } from '$lib/application/repository';
 import type { User } from '$lib/auth/types';
 
 const applicantUser: User = {

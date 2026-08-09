@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { seedApplications } from '$lib/mocks/applications';
-import ApplicationTable from './ApplicationTable.svelte';
+import ApplicationTable from '$lib/components/application/ApplicationTable.svelte';
 
 test('renders the empty state when there are no applications', async () => {
 	render(ApplicationTable, { applications: [] });

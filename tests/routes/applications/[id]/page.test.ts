@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { getSubmissionFeedback } from '$lib/application/submission-feedback';
-import { load } from './+page';
+import { load } from '../../../../src/routes/applications/[id]/+page';
 
 test('preserves the submission success signal for the detail page', () => {
 	const result = load({
