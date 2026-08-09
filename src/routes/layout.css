@@ -825,6 +825,11 @@ textarea {
 .chart-empty .chart {
 	display: none;
 }
+
+.chart-error {
+	color: var(--color-danger, #b94b3d);
+	font-size: 0.875rem;
+}
 .detail-layout {
 	display: grid;
 	grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.75fr);
