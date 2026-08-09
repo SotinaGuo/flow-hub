@@ -38,8 +38,13 @@ export function getApplicationDetailRows(
 	}
 
 	if (type === 'overtime' && 'startDate' in formData && 'startTime' in formData) {
+		const overtimeDate =
+			formData.startDate === formData.endDate
+				? formData.startDate
+				: `${formData.startDate} 至 ${formData.endDate}`;
+
 		return [
-			['日期范围', `${formData.startDate} 至 ${formData.endDate}`],
+			['加班日期', overtimeDate],
 			['时间范围', `${formData.startTime} 至 ${formData.endTime}`],
 			['申请事由', formData.reason]
 		];
@@ -92,7 +97,12 @@ export function getApplicationSummary(application: Pick<Application, 'type' | 'f
 		'startDate' in application.formData &&
 		'startTime' in application.formData
 	) {
-		return `${application.formData.startDate} 至 ${application.formData.endDate} ${application.formData.startTime} - ${application.formData.endTime}`;
+		const overtimeDate =
+			application.formData.startDate === application.formData.endDate
+				? application.formData.startDate
+				: `${application.formData.startDate} 至 ${application.formData.endDate}`;
+
+		return `${overtimeDate} ${application.formData.startTime} - ${application.formData.endTime}`;
 	}
 
 	if (application.type === 'custom' && 'customTypeName' in application.formData) {
