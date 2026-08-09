@@ -26,7 +26,9 @@ export function validateApplicationForm(
 		required(values.endDate, '请选择结束日期', errors, 'endDate');
 		if (
 			typeof values.startDate === 'string' &&
+			values.startDate.trim().length > 0 &&
 			typeof values.endDate === 'string' &&
+			values.endDate.trim().length > 0 &&
 			values.startDate > values.endDate
 		) {
 			errors.endDate = '结束日期不能早于开始日期';
@@ -58,7 +60,9 @@ export function validateApplicationForm(
 		required(values.endTime, '请选择结束时间', errors, 'endTime');
 		if (
 			typeof values.startDate === 'string' &&
+			values.startDate.trim().length > 0 &&
 			typeof values.endDate === 'string' &&
+			values.endDate.trim().length > 0 &&
 			values.startDate > values.endDate
 		) {
 			errors.endDate = '结束日期不能早于开始日期';

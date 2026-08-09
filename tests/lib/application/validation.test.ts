@@ -85,6 +85,20 @@ describe('application form validation', () => {
 		});
 	});
 
+	it('keeps the overtime end date required message when end date is empty', () => {
+		const errors = validateApplicationForm('overtime', {
+			applicantName: '陈默',
+			department: '技术部',
+			startDate: '2026-08-10',
+			endDate: '',
+			startTime: '18:30',
+			endTime: '21:00',
+			reason: '版本发布'
+		});
+
+		expect(errors.endDate).toBe('请选择结束日期');
+	});
+
 	it('accepts a same-day or multi-day overtime date range', () => {
 		const base = {
 			applicantName: '陈默',
